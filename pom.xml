@@ -4,9 +4,57 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.rocketbase.asset</groupId>
     <artifactId>imgproxy</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>LATEST-SNAPSHOT</version>
+
     <name>imgproxy</name>
-    <description>URL Generator for imgproxy</description>
+    <description>fluently generate asset urls for img-proxy within java</description>
+    <url>https://github.com/rocketbase-io/imgproxy-java/</url>
+    <inceptionYear>2019</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/rocketbase-io/imgproxy-java/issues</url>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:git:git://github.com/rocketbase-io/imgproxy-java.git</connection>
+        <developerConnection>scm:git:git@github.com:rocketbase-io/imgproxy-java.git</developerConnection>
+        <url>https://github.com/rocketbase-io/imgproxy-java/tree/master/</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Niels Schelbach</name>
+            <id>captainnilo</id>
+            <email>niels@rocketbase.io</email>
+            <organization>rocketbase.io software productions GmbH</organization>
+        </developer>
+        <developer>
+            <name>Marten Prieß</name>
+            <id>melistik</id>
+            <email>marten@rocketbase.io</email>
+            <organization>rocketbase.io software productions GmbH</organization>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
 
     <properties>
         <java.version>1.8</java.version>
@@ -15,26 +63,94 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+
+        <guava.version>28.1-jre</guava.version>
+        <lombok.version>1.18.10</lombok.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>28.1-jre</version>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <doclint>none</doclint>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
