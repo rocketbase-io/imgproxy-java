@@ -13,7 +13,7 @@ fluently generate asset urls for img-proxy within java
 ````java
 // simple unsigned 
 String url = Signature.of(new SignatureConfiguration(BASE_URL))
-                .size(100, 100)
+                .size(300, 300)
                 .url(SOURCE_URL)
 
 
