@@ -17,6 +17,12 @@ public class SignatureConfiguration {
 
     private int numberOfSignatureBytes = 32;
 
+    public SignatureConfiguration(String baseurl) {
+        this.baseurl = baseurl;
+        this.key = null;
+        this.salt = null;
+    }
+
     public SignatureConfiguration numberOfSignatureBytes(int numberOfSignatureBytes) {
         this.numberOfSignatureBytes = numberOfSignatureBytes;
         return this;
