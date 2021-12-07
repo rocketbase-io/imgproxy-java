@@ -58,6 +58,7 @@ public class Signature {
         return this;
     }
 
+
     /**
      * Meta-option that defines the width, height, enlarge, and extend. All arguments are optional and can be omited to use their default values.
      */
@@ -103,6 +104,22 @@ public class Signature {
      */
     public Signature resize(ResizeType resizeType) {
         processingOptions.add(createProcessingOption("rt", resizeType.name()));
+        return this;
+    }
+
+    /**
+     * Defines how imgproxy will min-width the source image.
+     */
+    public Signature minWidth(int minWidth){
+        processingOptions.add(createProcessingOption("mw", minWidth));
+        return this;
+    }
+
+    /**
+     * Defines how imgproxy will min-height the source image.
+     */
+    public Signature minHeight(int minHeight){
+        processingOptions.add(createProcessingOption("mh", minHeight));
         return this;
     }
 
