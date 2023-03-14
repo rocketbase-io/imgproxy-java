@@ -3,8 +3,9 @@
 ![logo](assets/imgproxy-java-logo.svg)
 
 
-[![Build Status](https://travis-ci.com/rocketbase-io/imgproxy-java.svg?branch=master)](https://travis-ci.com/rocketbase-io/imgproxy-java)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.rocketbase.asset/imgproxy/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.rocketbase.asset/imgproxy)
+![build](https://github.com/rocketbase-io/imgproxy-java/actions/workflows/ci.yml/badge.svg)
+[![Maven Central](https://badgen.net/maven/v/maven-central/io.rocketbase.asset/imgproxy)](https://mvnrepository.com/artifact/io.rocketbase.asset/imgproxy)
+
 
 fluently generate asset urls for img-proxy within java
 
