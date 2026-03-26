@@ -6,8 +6,12 @@ import io.rocketbase.asset.imgproxy.options.ResizeType;
 import io.rocketbase.asset.imgproxy.options.WatermarkPositionType;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,9 +21,14 @@ public class SignatureTest {
 
     private static final String BASE_URL_UNSIGNED = BASE_URL + "/notset";
 
-    private static final SignatureConfiguration SIGNED_CONFIGURATION = new SignatureConfiguration(BASE_URL, "secret", "hello");
+    private static final SignatureConfiguration SIGNED_CONFIGURATION = SignatureConfiguration.signedRaw(
+            BASE_URL,
+            "secret".getBytes(StandardCharsets.UTF_8),
+            "hello".getBytes(StandardCharsets.UTF_8));
 
-    private static final SignatureConfiguration UNSIGNED_CONFIGURATION = new SignatureConfiguration(BASE_URL, null, null);
+    private static final SignatureConfiguration SIGNED_HEX_CONFIGURATION = SignatureConfiguration.signed(BASE_URL, "736563726574", "68656c6c6f");
+
+    private static final SignatureConfiguration UNSIGNED_CONFIGURATION = SignatureConfiguration.unsigned(BASE_URL);
 
 
     private static final String SOURCE_URL = "s3://cdn.rocketbase.io/assets/rocketbase/logo-white-400x400-b2bf42d0ad.png";
@@ -59,6 +68,43 @@ public class SignatureTest {
 
         // then
         assertEquals(BASE_URL + "/fh2xh50cD5uXV9JSqu0Os8Re4Ii2TRgvEywvKPvJGJk/s:100:100/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateSimpleUrlWithResultTypeAndHexSigned() {
+        String url = Signature.of(SIGNED_HEX_CONFIGURATION)
+                .size(100, 100)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL + "/fh2xh50cD5uXV9JSqu0Os8Re4Ii2TRgvEywvKPvJGJk/s:100:100/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateSignedConfigurationFactoryFromHexStrings() {
+        SignatureConfiguration configuration = SignatureConfiguration.signed(BASE_URL, "736563726574", "68656c6c6f");
+
+        assertArrayEquals("secret".getBytes(StandardCharsets.UTF_8), configuration.getKeyBytes());
+        assertArrayEquals("hello".getBytes(StandardCharsets.UTF_8), configuration.getSaltBytes());
+    }
+
+    @Test
+    public void shouldCreateSignedRawConfigurationFactoryFromBytes() {
+        SignatureConfiguration configuration = SignatureConfiguration.signedRaw(
+                BASE_URL,
+                "secret".getBytes(StandardCharsets.UTF_8),
+                "hello".getBytes(StandardCharsets.UTF_8));
+
+        assertArrayEquals("secret".getBytes(StandardCharsets.UTF_8), configuration.getKeyBytes());
+        assertArrayEquals("hello".getBytes(StandardCharsets.UTF_8), configuration.getSaltBytes());
+    }
+
+    @Test
+    public void shouldCreateUnsignedConfigurationFactory() {
+        SignatureConfiguration configuration = SignatureConfiguration.unsigned(BASE_URL);
+
+        assertEquals(BASE_URL, configuration.getBaseurl());
+        assertNull(configuration.getKeyBytes());
+        assertNull(configuration.getSaltBytes());
     }
 
     @Test
@@ -530,13 +576,19 @@ public class SignatureTest {
     public void shouldSignUrlCorrect() throws Exception {
         // given
         String path = "/fill/300/400/sm/0/aHR0cDovL2V4YW1w/bGUuY29tL2ltYWdl/cy9jdXJpb3NpdHku/anBn.png";
-        String key = "secret";
-        String salt = "hello";
-
-        // when
-        String signature = Signature.signUrl(path, key, salt, 32);
+        String signature = Signature.signUrl(path, "secret".getBytes(StandardCharsets.UTF_8),
+                "hello".getBytes(StandardCharsets.UTF_8), 32);
 
         // then
+        assertEquals("AfrOrF3gWeDA6VOlDG4TzxMv39O7MXnF4CXpKUwGqRM", signature);
+    }
+
+    @Test
+    public void shouldSignUrlCorrectWithHexEncodedKeyAndSalt() throws Exception {
+        String path = "/fill/300/400/sm/0/aHR0cDovL2V4YW1w/bGUuY29tL2ltYWdl/cy9jdXJpb3NpdHku/anBn.png";
+
+        String signature = Signature.signUrl(path, Hex.decode("736563726574", "key"), Hex.decode("68656c6c6f", "salt"), 32);
+
         assertEquals("AfrOrF3gWeDA6VOlDG4TzxMv39O7MXnF4CXpKUwGqRM", signature);
     }
 
@@ -753,9 +805,24 @@ public class SignatureTest {
         String sourceUrl = "https://example.org/image @2x.png?foo=bar@baz";
         String escapedSourceUrl = "https://example.org/image%20%402x.png%3Ffoo=bar%40baz";
         String path = "/s:100:100/plain/" + escapedSourceUrl + "@png";
-        String signature = Signature.signUrl(path, "secret", "hello", 32);
+        String signature = Signature.signUrl(path, "secret".getBytes(StandardCharsets.UTF_8),
+                "hello".getBytes(StandardCharsets.UTF_8), 32);
 
         String url = Signature.of(SIGNED_CONFIGURATION)
+                .size(100, 100)
+                .urlPlain(sourceUrl, ImageType.png);
+
+        assertEquals(BASE_URL + "/" + signature + path, url);
+    }
+
+    @Test
+    public void shouldCreateSignedPlainUrlWithHexEncodedKeyAndSalt() throws Exception {
+        String sourceUrl = "https://example.org/image @2x.png?foo=bar@baz";
+        String escapedSourceUrl = "https://example.org/image%20%402x.png%3Ffoo=bar%40baz";
+        String path = "/s:100:100/plain/" + escapedSourceUrl + "@png";
+        String signature = Signature.signUrl(path, Hex.decode("736563726574", "key"), Hex.decode("68656c6c6f", "salt"), 32);
+
+        String url = Signature.of(SIGNED_HEX_CONFIGURATION)
                 .size(100, 100)
                 .urlPlain(sourceUrl, ImageType.png);
 
@@ -788,7 +855,22 @@ public class SignatureTest {
 
     @Test
     public void shouldCreateSignedUrlWithReducedSignatureBytes() {
-        SignatureConfiguration configuration = new SignatureConfiguration(BASE_URL, "secret", "hello")
+        SignatureConfiguration configuration = SignatureConfiguration.signedRaw(
+                BASE_URL,
+                "secret".getBytes(StandardCharsets.UTF_8),
+                "hello".getBytes(StandardCharsets.UTF_8))
+                .numberOfSignatureBytes(8);
+
+        String url = Signature.of(configuration)
+                .size(100, 100)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL + "/fh2xh50cD5s/s:100:100/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateSignedUrlWithReducedSignatureBytesAndHexKeySalt() {
+        SignatureConfiguration configuration = SignatureConfiguration.signed(BASE_URL, "736563726574", "68656c6c6f")
                 .numberOfSignatureBytes(8);
 
         String url = Signature.of(configuration)
@@ -814,7 +896,10 @@ public class SignatureTest {
     public void shouldCreateSignatureWithUnicodeKeySaltAndPathUsingUtf8() {
         String sourceUrl = "https://cdn.example.org/über uns/weiß.png?emoji=😊";
         String encodedSourceUrl = "aHR0cHM6Ly9jZG4uZXhhbXBsZS5vcmcvw7xiZXIgdW5zL3dlacOfLnBuZz9lbW9qaT3wn5iK";
-        SignatureConfiguration configuration = new SignatureConfiguration(BASE_URL, "sëcret🔑", "sälty🧂")
+        SignatureConfiguration configuration = SignatureConfiguration.signedRaw(
+                BASE_URL,
+                "sëcret🔑".getBytes(StandardCharsets.UTF_8),
+                "sälty🧂".getBytes(StandardCharsets.UTF_8))
                 .numberOfSignatureBytes(12);
 
         String url = Signature.of(configuration)
@@ -827,7 +912,9 @@ public class SignatureTest {
     @Test
     public void shouldNotAllowTooSmallNumberOfSignatureBytes() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> new SignatureConfiguration(BASE_URL, "secret", "hello").numberOfSignatureBytes(0));
+                () -> SignatureConfiguration.signedRaw(BASE_URL,
+                        "secret".getBytes(StandardCharsets.UTF_8),
+                        "hello".getBytes(StandardCharsets.UTF_8)).numberOfSignatureBytes(0));
 
         assertEquals("numberOfSignatureBytes must be between 1 and 32 inclusively", exception.getMessage());
     }
@@ -835,9 +922,27 @@ public class SignatureTest {
     @Test
     public void shouldNotAllowTooLargeNumberOfSignatureBytes() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> new SignatureConfiguration(BASE_URL, "secret", "hello").numberOfSignatureBytes(33));
+                () -> SignatureConfiguration.signedRaw(BASE_URL,
+                        "secret".getBytes(StandardCharsets.UTF_8),
+                        "hello".getBytes(StandardCharsets.UTF_8)).numberOfSignatureBytes(33));
 
         assertEquals("numberOfSignatureBytes must be between 1 and 32 inclusively", exception.getMessage());
+    }
+
+    @Test
+    public void shouldNotAllowInvalidHexEncodedKey() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> SignatureConfiguration.signed(BASE_URL, "xyz", "68656c6c6f"));
+
+        assertEquals("key must be a valid even-length hex string", exception.getMessage());
+    }
+
+    @Test
+    public void shouldNotAllowInvalidHexEncodedSalt() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> SignatureConfiguration.signed(BASE_URL, "736563726574", "abc"));
+
+        assertEquals("salt must be a valid even-length hex string", exception.getMessage());
     }
 
 }

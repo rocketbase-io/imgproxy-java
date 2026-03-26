@@ -659,16 +659,17 @@ public class Signature {
         return buildSignedUrl(path);
     }
 
-    static String signUrl(String path, String key, String salt, int numberOfSignatureBytes) throws NoSuchAlgorithmException, InvalidKeyException {
-        if (key == null || salt == null) {
+    static String signUrl(String path, byte[] keyBytes, byte[] saltBytes, int numberOfSignatureBytes) throws NoSuchAlgorithmException, InvalidKeyException {
+        if (keyBytes == null || saltBytes == null) {
             return "notset";
         }
         if (numberOfSignatureBytes < 1 || numberOfSignatureBytes > 32) {
             throw new IllegalArgumentException("numberOfSignatureBytes must be between 1 and 32 inclusively");
         }
+        byte[] pathBytes = path.getBytes(StandardCharsets.UTF_8);
         byte[] digest = HmacSha256.sign(
-                key.getBytes(StandardCharsets.UTF_8),
-                (salt + path).getBytes(StandardCharsets.UTF_8)
+                keyBytes,
+                concat(saltBytes, pathBytes)
         );
         return UrlSafeBase64.encode(digest, numberOfSignatureBytes);
     }
@@ -731,8 +732,15 @@ public class Signature {
     }
 
     private String buildSignedUrl(String path) throws NoSuchAlgorithmException, InvalidKeyException {
-        String signature = signUrl(path, configuration.getKey(), configuration.getSalt(), configuration.getNumberOfSignatureBytes());
+        String signature = signUrl(path, configuration.getKeyBytes(), configuration.getSaltBytes(), configuration.getNumberOfSignatureBytes());
         return configuration.getBaseurl() + "/" + signature + path;
+    }
+
+    private static byte[] concat(byte[] first, byte[] second) {
+        byte[] result = new byte[first.length + second.length];
+        System.arraycopy(first, 0, result, 0, first.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+        return result;
     }
 
     static String escapePlainSourceUrl(String sourceUrl) {
