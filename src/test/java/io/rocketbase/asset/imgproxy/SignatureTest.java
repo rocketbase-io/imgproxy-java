@@ -541,6 +541,252 @@ public class SignatureTest {
     }
 
     @Test
+    public void shouldCreateResizeUrlWithFillDown() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .resize(ResizeType.fill_down, 300, 200)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/rs:fill-down:300:200/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateResizeTypeUrlWithForce() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .resize(ResizeType.force)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/rt:force/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateMinWidthUrl() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .minWidth(320)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/mw:320/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateMinHeightUrl() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .minHeight(240)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/mh:240/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateZoomUrlWithSingleFactor() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .zoom(1.5)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/z:1.5/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateZoomUrlWithIndependentFactors() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .zoom(1.5, 2.0)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/z:1.5:2.0/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateDprUrlWithFactor() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .dpr(2.0)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/dpr:2.0/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateExtendUrlWithGravityAndRelativeOffsets() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .extend(true, GravityType.noea, 0.25, -0.5)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/ex:1:noea:0.25:-0.5/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateExtendAspectRatioUrlWithFocalPoint() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .extendAspectRatio(true, 0.25, 0.75)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/exar:1:fp:0.25:0.75/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateGravityUrlWithRelativeOffsets() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .gravity(GravityType.ce, 0.25, -0.5)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/g:ce:0.25:-0.5/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateCropUrlWithRelativeSizeAndOffsets() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .crop(0.5, 0.25, GravityType.ce, 0.1, 0.2)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/c:0.5:0.25:ce:0.1:0.2/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateTrimUrlWithAllArguments() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .trim(10, "FF00FF", true, false)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/t:10:FF00FF:1:0/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreatePaddingUrl() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .padding(10, 20, 30, 40)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/pd:10:20:30:40/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateAutoRotateUrl() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .autoRotate(true)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/ar:1/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateRotateUrl() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .rotate(270)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/rot:270/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateFlipUrl() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .flip(true, false)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/fl:1:0/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateBackgroundResetUrl() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .background()
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/bg/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreatePixelateUrl() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .pixelate(12)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/pix:12/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateWatermarkUrlWithRelativeOffsets() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .watermark(0.8, WatermarkPositionType.re, 0.25, -0.5, 0.4)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/wm:0.8:re:0.25:-0.5:0.4/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateQualityUrlWithZero() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .quality(0)
+                .url(SOURCE_URL, ImageType.jpg);
+
+        assertEquals(BASE_URL_UNSIGNED + "/q:0/" + ENCODED_SOURCE_URL + ".jpg", url);
+    }
+
+    @Test
+    public void shouldCreateFilenameUrlWithEncodedFlag() {
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .filename("ZsO2w7YucG5n", true)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/fn:ZsO2w7YucG5n:1/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldEscapePlainSourceUrlSpecialCharacters() {
+        String sourceUrl = "https://example.org/image @2x.png?foo=bar@baz";
+
+        assertEquals("https://example.org/image%20%402x.png%3Ffoo=bar%40baz", Signature.escapePlainSourceUrl(sourceUrl));
+    }
+
+    @Test
+    public void shouldCreatePlainUrl() {
+        String sourceUrl = "https://example.org/image @2x.png?foo=bar@baz";
+        String escapedSourceUrl = "https://example.org/image%20%402x.png%3Ffoo=bar%40baz";
+
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .size(100, 100)
+                .urlPlain(sourceUrl, ImageType.png);
+
+        assertEquals(BASE_URL_UNSIGNED + "/s:100:100/plain/" + escapedSourceUrl + "@png", url);
+    }
+
+    @Test
+    public void shouldCreateSignedPlainUrl() throws Exception {
+        String sourceUrl = "https://example.org/image @2x.png?foo=bar@baz";
+        String escapedSourceUrl = "https://example.org/image%20%402x.png%3Ffoo=bar%40baz";
+        String path = "/s:100:100/plain/" + escapedSourceUrl + "@png";
+        String signature = Signature.signUrl(path, "secret", "hello", 32);
+
+        String url = Signature.of(SIGNED_CONFIGURATION)
+                .size(100, 100)
+                .urlPlain(sourceUrl, ImageType.png);
+
+        assertEquals(BASE_URL + "/" + signature + path, url);
+    }
+
+    @Test
+    public void shouldNotAllowNonPositiveZoom() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> Signature.of(UNSIGNED_CONFIGURATION).zoom(0));
+
+        assertEquals("zoom must be greater than 0", exception.getMessage());
+    }
+
+    @Test
+    public void shouldNotAllowNonRightAngleRotation() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> Signature.of(UNSIGNED_CONFIGURATION).rotate(45));
+
+        assertEquals("angle must be a multiple of 90", exception.getMessage());
+    }
+
+    @Test
+    public void shouldNotAllowSmartGravityForExtend() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> Signature.of(UNSIGNED_CONFIGURATION).extend(true, GravityType.sm));
+
+        assertEquals("sm is not allowed with extend gravity", exception.getMessage());
+    }
+
+    @Test
     public void shouldCreateSignedUrlWithReducedSignatureBytes() {
         SignatureConfiguration configuration = new SignatureConfiguration(BASE_URL, "secret", "hello")
                 .numberOfSignatureBytes(8);
