@@ -1,8 +1,4 @@
 package io.rocketbase.asset.imgproxy;
-
-import com.google.common.hash.HashCode;
-import com.google.common.hash.Hashing;
-import com.google.common.io.BaseEncoding;
 import io.rocketbase.asset.imgproxy.options.GravityType;
 import io.rocketbase.asset.imgproxy.options.ImageType;
 import io.rocketbase.asset.imgproxy.options.ResizeType;
@@ -13,6 +9,7 @@ import lombok.SneakyThrows;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -356,9 +353,7 @@ public class Signature {
                     .append(processingOption);
         }
 
-        String url = BaseEncoding.base64Url()
-                .omitPadding()
-                .encode(sourceUrl.getBytes());
+        String url = UrlSafeBase64.encode(sourceUrl.getBytes(StandardCharsets.UTF_8));
         builder.append("/")
                 .append(url);
         if (imageType != null) {
@@ -376,12 +371,14 @@ public class Signature {
         if (key == null || salt == null) {
             return "notset";
         }
-        String encodeString = salt + path;
-        HashCode hashCode = Hashing.hmacSha256(key.getBytes())
-                .hashBytes(encodeString.getBytes());
-        return BaseEncoding.base64Url()
-                .omitPadding()
-                .encode(hashCode.asBytes(), 0, numberOfSignatureBytes);
+        if (numberOfSignatureBytes < 1 || numberOfSignatureBytes > 32) {
+            throw new IllegalArgumentException("numberOfSignatureBytes must be between 1 and 32 inclusively");
+        }
+        byte[] digest = HmacSha256.sign(
+                key.getBytes(StandardCharsets.UTF_8),
+                (salt + path).getBytes(StandardCharsets.UTF_8)
+        );
+        return UrlSafeBase64.encode(digest, numberOfSignatureBytes);
     }
 
 

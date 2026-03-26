@@ -63,17 +63,11 @@
         <maven.compiler.release>11</maven.compiler.release>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
 
-        <guava.version>33.5.0-jre</guava.version>
         <lombok.version>1.18.44</lombok.version>
-        <junit.version>4.13.2</junit.version>
+        <junit.version>5.14.3</junit.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -81,8 +75,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>

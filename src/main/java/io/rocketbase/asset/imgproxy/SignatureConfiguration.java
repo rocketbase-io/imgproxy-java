@@ -24,6 +24,9 @@ public class SignatureConfiguration {
     }
 
     public SignatureConfiguration numberOfSignatureBytes(int numberOfSignatureBytes) {
+        if (numberOfSignatureBytes < 1 || numberOfSignatureBytes > 32) {
+            throw new IllegalArgumentException("numberOfSignatureBytes must be between 1 and 32 inclusively");
+        }
         this.numberOfSignatureBytes = numberOfSignatureBytes;
         return this;
     }

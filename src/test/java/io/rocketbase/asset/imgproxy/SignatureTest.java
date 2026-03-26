@@ -4,10 +4,12 @@ import io.rocketbase.asset.imgproxy.options.GravityType;
 import io.rocketbase.asset.imgproxy.options.ImageType;
 import io.rocketbase.asset.imgproxy.options.ResizeType;
 import io.rocketbase.asset.imgproxy.options.WatermarkPositionType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SignatureTest {
 
@@ -32,8 +34,7 @@ public class SignatureTest {
                 .url(SOURCE_URL);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/s:100:100/" + ENCODED_SOURCE_URL));
+        assertEquals(BASE_URL_UNSIGNED + "/s:100:100/" + ENCODED_SOURCE_URL, url);
     }
 
     @Test
@@ -45,8 +46,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/s:100:100/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/s:100:100/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -58,8 +58,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL + "/fh2xh50cD5uXV9JSqu0Os8Re4Ii2TRgvEywvKPvJGJk/s:100:100/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL + "/fh2xh50cD5uXV9JSqu0Os8Re4Ii2TRgvEywvKPvJGJk/s:100:100/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -71,8 +70,7 @@ public class SignatureTest {
                 .url(SOURCE_URL);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/rs:fit:500:500:1:0/" + ENCODED_SOURCE_URL));
+        assertEquals(BASE_URL_UNSIGNED + "/rs:fit:500:500:1:0/" + ENCODED_SOURCE_URL, url);
     }
 
     @Test
@@ -84,8 +82,7 @@ public class SignatureTest {
                 .url(SOURCE_URL);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/rs:fit:500:500:1/" + ENCODED_SOURCE_URL));
+        assertEquals(BASE_URL_UNSIGNED + "/rs:fit:500:500:1/" + ENCODED_SOURCE_URL, url);
     }
 
     @Test
@@ -97,8 +94,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/rs:fit:100:100/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/rs:fit:100:100/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -110,8 +106,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/rt:fit/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/rt:fit/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -123,8 +118,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/s:100:200:0:1/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/s:100:200:0:1/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -136,8 +130,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/s:100:200:1/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/s:100:200:1/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -149,8 +142,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/s:100:200/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/s:100:200/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -162,8 +154,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/w:600/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/w:600/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -175,8 +166,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/h:60/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/h:60/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -188,8 +178,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/dpr:1/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/dpr:1/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -201,8 +190,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/el:1/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/el:1/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -214,17 +202,14 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/ex:1/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/ex:1/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotCreateGravityUrlWithSmartAndOffset() {
-        // given
-        // when
-        Signature.of(UNSIGNED_CONFIGURATION)
+        assertThrows(IllegalArgumentException.class, () -> Signature.of(UNSIGNED_CONFIGURATION)
                 .gravity(GravityType.sm, 100, 200)
-                .url(SOURCE_URL, ImageType.png);
+                .url(SOURCE_URL, ImageType.png));
     }
 
     @Test
@@ -236,8 +221,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/g:no:100:200/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/g:no:100:200/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -249,8 +233,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/g:sm/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/g:sm/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -262,8 +245,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/g:fp:0.5:0.2/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/g:fp:0.5:0.2/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
 
@@ -276,8 +258,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/c:50:50:ce:10:10/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/c:50:50:ce:10:10/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -289,8 +270,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/c:50:50:ce/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/c:50:50:ce/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -302,8 +282,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/c:50:50:fp:0.3:0.4/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/c:50:50:fp:0.3:0.4/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -315,8 +294,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/c:50:50/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/c:50:50/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -328,26 +306,21 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.jpg);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/q:35/" + ENCODED_SOURCE_URL + ".jpg"));
+        assertEquals(BASE_URL_UNSIGNED + "/q:35/" + ENCODED_SOURCE_URL + ".jpg", url);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotCreateQualityUrlWithTooSmallQuality() {
-        // given
-        // when
-        Signature.of(UNSIGNED_CONFIGURATION)
+        assertThrows(IllegalArgumentException.class, () -> Signature.of(UNSIGNED_CONFIGURATION)
                 .quality(-1)
-                .url(SOURCE_URL, ImageType.jpg);
+                .url(SOURCE_URL, ImageType.jpg));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotCreateQualityUrlWithTooBigQuality() {
-        // given
-        // when
-        Signature.of(UNSIGNED_CONFIGURATION)
+        assertThrows(IllegalArgumentException.class, () -> Signature.of(UNSIGNED_CONFIGURATION)
                 .quality(101)
-                .url(SOURCE_URL, ImageType.jpg);
+                .url(SOURCE_URL, ImageType.jpg));
     }
 
     @Test
@@ -359,8 +332,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/bg:20:90:199/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/bg:20:90:199/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -372,46 +344,37 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/bg:AA0000/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/bg:AA0000/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotCreateBackgroundUrlWithInvalidHexCode() {
-        // given
-        // when
-        Signature.of(UNSIGNED_CONFIGURATION)
+        assertThrows(IllegalArgumentException.class, () -> Signature.of(UNSIGNED_CONFIGURATION)
                 .background("AA00ZZ")
-                .url(SOURCE_URL, ImageType.png);
+                .url(SOURCE_URL, ImageType.png));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotCreateBackgroundUrlWithInvalidR() {
-        // given
-        // when
-        Signature.of(UNSIGNED_CONFIGURATION)
+        assertThrows(IllegalArgumentException.class, () -> Signature.of(UNSIGNED_CONFIGURATION)
                 .background(-1, 0, 0)
-                .url(SOURCE_URL, ImageType.png);
+                .url(SOURCE_URL, ImageType.png));
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotCreateBackgroundUrlWithInvalidG() {
-        // given
-        // when
-        Signature.of(UNSIGNED_CONFIGURATION)
+        assertThrows(IllegalArgumentException.class, () -> Signature.of(UNSIGNED_CONFIGURATION)
                 .background(0, -1, 0)
-                .url(SOURCE_URL, ImageType.png);
+                .url(SOURCE_URL, ImageType.png));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotCreateBackgroundUrlWithInvalidB() {
-        // given
-        // when
-        Signature.of(UNSIGNED_CONFIGURATION)
+        assertThrows(IllegalArgumentException.class, () -> Signature.of(UNSIGNED_CONFIGURATION)
                 .background(0, 0, -1)
-                .url(SOURCE_URL, ImageType.png);
+                .url(SOURCE_URL, ImageType.png));
     }
 
     @Test
@@ -423,8 +386,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/bl:5/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/bl:5/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -436,8 +398,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/sh:5/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/sh:5/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -449,8 +410,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/wm:0.8:nowe:1:1:0.5/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/wm:0.8:nowe:1:1:0.5/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -462,8 +422,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/wm:0.8:nowe:40:40/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/wm:0.8:nowe:40:40/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -475,8 +434,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/wm:0.8:ce/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/wm:0.8:ce/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -488,8 +446,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/wm:1.0/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/wm:1.0/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -501,8 +458,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/pr:default:test1/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/pr:default:test1/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
 
@@ -515,8 +471,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/cb:tralla/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/cb:tralla/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -528,8 +483,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/fn:filename.png/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/fn:filename.png/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -541,8 +495,7 @@ public class SignatureTest {
                 .url(SOURCE_URL, ImageType.png);
 
         // then
-        assertThat(url,
-                is(BASE_URL_UNSIGNED + "/f:tiff/" + ENCODED_SOURCE_URL + ".png"));
+        assertEquals(BASE_URL_UNSIGNED + "/f:tiff/" + ENCODED_SOURCE_URL + ".png", url);
     }
 
     @Test
@@ -552,25 +505,25 @@ public class SignatureTest {
         String result = Signature.createProcessingOption("test", "one", 1, true);
 
         // then
-        assertThat(result, is("test:one:1:1"));
+        assertEquals("test:one:1:1", result);
     }
 
 
     @Test
     public void shouldTestByte() {
-        assertThat(Signature.isByte(0), is(true));
-        assertThat(Signature.isByte(-1), is(false));
-        assertThat(Signature.isByte(255), is(true));
-        assertThat(Signature.isByte(256), is(false));
+        assertTrue(Signature.isByte(0));
+        assertFalse(Signature.isByte(-1));
+        assertTrue(Signature.isByte(255));
+        assertFalse(Signature.isByte(256));
     }
 
     @Test
     public void shouldTestHexColor() {
-        assertThat(Signature.isHexColor("000000"), is(true));
-        assertThat(Signature.isHexColor("0000ff"), is(true));
-        assertThat(Signature.isHexColor("00AA00"), is(true));
-        assertThat(Signature.isHexColor("11111"), is(false));
-        assertThat(Signature.isHexColor("GG0000"), is(false));
+        assertTrue(Signature.isHexColor("000000"));
+        assertTrue(Signature.isHexColor("0000ff"));
+        assertTrue(Signature.isHexColor("00AA00"));
+        assertFalse(Signature.isHexColor("11111"));
+        assertFalse(Signature.isHexColor("GG0000"));
     }
 
     @Test
@@ -584,7 +537,61 @@ public class SignatureTest {
         String signature = Signature.signUrl(path, key, salt, 32);
 
         // then
-        assertThat(signature, is("AfrOrF3gWeDA6VOlDG4TzxMv39O7MXnF4CXpKUwGqRM"));
+        assertEquals("AfrOrF3gWeDA6VOlDG4TzxMv39O7MXnF4CXpKUwGqRM", signature);
+    }
+
+    @Test
+    public void shouldCreateSignedUrlWithReducedSignatureBytes() {
+        SignatureConfiguration configuration = new SignatureConfiguration(BASE_URL, "secret", "hello")
+                .numberOfSignatureBytes(8);
+
+        String url = Signature.of(configuration)
+                .size(100, 100)
+                .url(SOURCE_URL, ImageType.png);
+
+        assertEquals(BASE_URL + "/fh2xh50cD5s/s:100:100/" + ENCODED_SOURCE_URL + ".png", url);
+    }
+
+    @Test
+    public void shouldCreateUrlWithUnicodeSourceUsingUtf8Encoding() {
+        String sourceUrl = "https://cdn.example.org/über uns/weiß.png?emoji=😊";
+        String encodedSourceUrl = "aHR0cHM6Ly9jZG4uZXhhbXBsZS5vcmcvw7xiZXIgdW5zL3dlacOfLnBuZz9lbW9qaT3wn5iK";
+
+        String url = Signature.of(UNSIGNED_CONFIGURATION)
+                .resize(ResizeType.fill, 300, 200)
+                .url(sourceUrl, ImageType.webp);
+
+        assertEquals(BASE_URL_UNSIGNED + "/rs:fill:300:200/" + encodedSourceUrl + ".webp", url);
+    }
+
+    @Test
+    public void shouldCreateSignatureWithUnicodeKeySaltAndPathUsingUtf8() {
+        String sourceUrl = "https://cdn.example.org/über uns/weiß.png?emoji=😊";
+        String encodedSourceUrl = "aHR0cHM6Ly9jZG4uZXhhbXBsZS5vcmcvw7xiZXIgdW5zL3dlacOfLnBuZz9lbW9qaT3wn5iK";
+        SignatureConfiguration configuration = new SignatureConfiguration(BASE_URL, "sëcret🔑", "sälty🧂")
+                .numberOfSignatureBytes(12);
+
+        String url = Signature.of(configuration)
+                .resize(ResizeType.fill, 300, 200)
+                .url(sourceUrl, ImageType.webp);
+
+        assertEquals(BASE_URL + "/ANvMYp-DXTcP22jW/rs:fill:300:200/" + encodedSourceUrl + ".webp", url);
+    }
+
+    @Test
+    public void shouldNotAllowTooSmallNumberOfSignatureBytes() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new SignatureConfiguration(BASE_URL, "secret", "hello").numberOfSignatureBytes(0));
+
+        assertEquals("numberOfSignatureBytes must be between 1 and 32 inclusively", exception.getMessage());
+    }
+
+    @Test
+    public void shouldNotAllowTooLargeNumberOfSignatureBytes() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new SignatureConfiguration(BASE_URL, "secret", "hello").numberOfSignatureBytes(33));
+
+        assertEquals("numberOfSignatureBytes must be between 1 and 32 inclusively", exception.getMessage());
     }
 
 }
